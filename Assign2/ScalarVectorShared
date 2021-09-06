@@ -1,0 +1,42 @@
+//Scalar vector addition using work sharing first private
+#include <omp.h>
+#include <stdio.h>
+#include<stdlib.h>
+
+
+
+int main() {
+
+    int *a;
+    int *b;
+    int n,x;
+    a=(int*)malloc(n*sizeof(int));
+    b=(int*)malloc(n*sizeof(int));
+    
+    printf("Enter no of elements in array:");
+    scanf("%d",&n);
+    
+    for(int i=0;i<n;i++)
+    {
+    	a[i]=i;
+	}
+	
+	printf("Enter Scalar:");
+	scanf("%d",&x);
+	
+	#pragma omp parallel for shared(a,x) num_threads(n/3)
+	for(int i = 0;i < n;i++) 
+	{
+		b[i]=a[i]+x;
+		printf("\nThread number %d works on element %d",omp_get_thread_num(),i);	
+	}
+	
+		printf("\ni\ta[i]\t+x\t=\tc[i]\n");
+        for(int i=0; i<n; i++) 
+		{
+	  		printf("%d\t%d\t%d\t=\t%d\n", i, a[i],x,b[i]);
+        }
+        
+        return 0;
+	
+}
